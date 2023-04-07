@@ -13,6 +13,7 @@ public abstract class Repository {
     public abstract Optional<Product> tryGetProduct(int productId);
 
     public abstract Optional<Order> tryGetOrder(int orderId);
+    public abstract Optional<Order> tryGetOrderWithCustomerLastname(String lastname);
 
     public abstract void save(Product product);
 

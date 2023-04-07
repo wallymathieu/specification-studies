@@ -4,21 +4,15 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.*;
 
-import com.querydsl.jpa.impl.JPAQuery;
-
 import se.gewalli.commands.Command;
 import se.gewalli.data.EntityNotFound;
 import se.gewalli.data.HibernateRepository;
 import se.gewalli.data.Repository;
-import se.gewalli.entities.QOrder;
-import se.gewalli.entities.Order;
 import xmlimport.GetCommands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Supplier;
-
-import javax.persistence.EntityManager;
 
 public class CustomerDataTests {
     private Supplier<SessionFactory> sessionFactory = () -> setUp();
@@ -63,10 +57,7 @@ public class CustomerDataTests {
     }
     @Test
     public void canGetOrderThroughQuery() throws EntityNotFound {
-        QOrder order= QOrder.order;
-        JPAQuery<Order> query = new JPAQuery<>(_session.getEntityManagerFactory().createEntityManager());
-        Order fetchedOrder= query.from(order).where(order.customer.lastname.eq("Bohlen")).fetchFirst();
-        assertEquals("Bohlen", fetchedOrder.customer.lastname);
+        assertEquals("Bohlen", repository.tryGetOrderWithCustomerLastname("Bohlen").get().customer.lastname);
     }
     @Test
     public void canGetProductById() throws EntityNotFound {

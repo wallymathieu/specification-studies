@@ -1,9 +1,13 @@
 package se.gewalli.data;
 
 import org.hibernate.Session;
+
+import com.querydsl.jpa.impl.JPAQuery;
+
 import se.gewalli.entities.Customer;
 import se.gewalli.entities.Order;
 import se.gewalli.entities.Product;
+import se.gewalli.entities.QOrder;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -56,5 +60,11 @@ public class HibernateRepository extends Repository  {
     @Override
     public Collection<Order> getOrders() {
         return session.createQuery( "from Orders", Order.class).getResultList();
+    }
+    @Override
+    public Optional<Order> tryGetOrderWithCustomerLastname(String lastname) {
+        JPAQuery<Order> query = new JPAQuery<>(session.getEntityManagerFactory().createEntityManager());
+        QOrder order= QOrder.order;
+        return Optional.ofNullable(query.from(order).where(order.customer.lastname.eq("Bohlen")).fetchFirst());
     }
 }
