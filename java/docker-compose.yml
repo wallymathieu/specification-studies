@@ -1,0 +1,29 @@
+version: '3.4'
+services:
+  pg:
+    restart: always
+    image: postgres 
+    ports:
+      - "5432:5432"
+    environment:
+      - DEBUG=false
+      - PGDATA=/vm_pg/data
+      - POSTGRES_PASSWORD=0c52788f-770c-4ddc-a6e3-19c324e1fb24
+      - POSTGRES_USER=specification-studies
+      - POSTGRES_DB=specification-studies-test
+    volumes:
+    - ./tmp/:/vm_pg/
+
+  app:
+    restart: always
+    image: "openjdk:11.0.1-jre-slim-stretch"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/:/app/
+    environment: 
+      - connection_url=jdbc:postgresql://pg:5432/specification-studies-test
+      - connection_username=specification-studies
+      - connection_password=0c52788f-770c-4ddc-a6e3-19c324e1fb24
+    working_dir: /app
+    command: "java -jar specification-studies-1.0-SNAPSHOT.jar"
