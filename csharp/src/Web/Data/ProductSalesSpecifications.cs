@@ -4,7 +4,7 @@ using SomeBasicEFApp.Web.Entities;
 
 namespace SomeBasicEFApp.Web.Data;
 
-public static class ProductSalesQueryHandler
+public static class ProductSalesSpecifications
 {
     /// <summary>
     /// All of the products that has orders associated with them
