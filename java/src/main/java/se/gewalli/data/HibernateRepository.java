@@ -64,7 +64,7 @@ public class HibernateRepository extends Repository  {
     @Override
     public Optional<Order> tryGetOrderWithCustomerLastname(String lastname) {
         JPAQuery<Order> query =
-            new GetOrderWithCustomerLastname(session.getEntityManagerFactory().createEntityManager())
+            new GetOrderWithCustomerLastnameSpecification(session.getEntityManagerFactory().createEntityManager())
                 .toQuery(lastname);
         return Optional.ofNullable(query.fetchFirst());
     }

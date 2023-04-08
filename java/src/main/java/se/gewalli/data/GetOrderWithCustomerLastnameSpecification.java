@@ -7,11 +7,11 @@ import com.querydsl.jpa.impl.JPAQuery;
 import se.gewalli.entities.Order;
 import se.gewalli.entities.QOrder;
 
-public class GetOrderWithCustomerLastname {
+public class GetOrderWithCustomerLastnameSpecification {
     
     private EntityManager em;
 
-    public GetOrderWithCustomerLastname(EntityManager em) {
+    public GetOrderWithCustomerLastnameSpecification(EntityManager em) {
         this.em = em;
     }
 
