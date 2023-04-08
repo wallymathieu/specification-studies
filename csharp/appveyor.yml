@@ -1,0 +1,13 @@
+image: Visual Studio 2022
+install:
+  - cmd: choco install dotnetcore-sdk -y
+build_script:
+  - dotnet restore
+  - dotnet build entity-framework-studies.sln
+test_script:
+  - dotnet test tests\Tests
+  - dotnet test tests\FsTests
+branches:
+  only:
+    - master
+    - dotnetcore

@@ -1,0 +1,46 @@
+<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.ComponentModel;
+using System.Text.Json.Serialization;
+using Saithe;
+using Saithe.SystemTextJson;
+
+namespace SomeBasicEFApp.Web.ValueTypes;
+
+<#
+var types = new []{
+    new {Name="CustomerId", Prefix="customer-"},
+    new {Name="OrderId", Prefix="order-"},
+    new {Name= "ProductId", Prefix="product-"}};
+foreach (var typeT in types){
+var type =typeT.Name;
+var prefix = typeT.Prefix;
+#>
+    ///
+[TypeConverter(typeof(ParseTypeConverter<<#= type #>>)),
+ JsonConverter(typeof(ParseTypeJsonConverter<<#= type #>>))]
+public record struct <#= type #> (int Value) : IValueType
+{
+    ///
+    public override string ToString()=>$"<#= prefix #>{Value}";
+    ///
+    public static <#= type #> Parse(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            throw new ArgumentException("Missing value");
+        if (!value.StartsWith("<#= prefix #>", StringComparison.InvariantCultureIgnoreCase))
+            throw new ArgumentException($"Expected '{value}' to start with prefix '<#= prefix #>'");
+        return new <#= type #>(Int32.TryParse(value.Substring("<#= prefix #>".Length), out var val)
+                ? val
+                : throw new ArgumentException());
+    }
+    ///
+    public static implicit operator <#= type #>(int d) => new <#= type #>(d);
+}
+<#
+}
+#>
